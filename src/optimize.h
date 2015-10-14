@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with ebti.  If not, see <http://www.gnu.org/licenses/>.
 */
 #ifndef OPTIMIZE_H
-#define OPTIMIZIE_H
+#define OPTIMIZE_H
 
 #include "parse.h"
 
