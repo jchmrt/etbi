@@ -67,7 +67,7 @@ optimize_brainfuck (instruction_list *lst)
  * inner instructions with optimize_brainfuck and return the
  * instruction.
  */
-instruction *
+static instruction *
 optimize_loop (instruction  *loop)
 {
   instruction_list *loop_insts = loop->argument.insts;
