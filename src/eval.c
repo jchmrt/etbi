@@ -1,20 +1,20 @@
 /*
 Copyright 2015 Jochem Raat
 
-This file is part of ebti.
+This file is part of etbi.
 
-ebti is free software: you can redistribute it and/or modify it under
+etbi is free software: you can redistribute it and/or modify it under
 the terms of the GNU General Public License as published by the Free
 Software Foundation, either version 3 of the License, or (at your
 option) any later version.
 
-ebti is distributed in the hope that it will be useful, but WITHOUT
+etbi is distributed in the hope that it will be useful, but WITHOUT
 ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
 for more details.
 
 You should have received a copy of the GNU General Public License
-nalong with ebti.  If not, see <http://www.gnu.org/licenses/>.
+nalong with etbi.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include <stdio.h>
 #include "eval.h"
