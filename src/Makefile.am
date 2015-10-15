@@ -5,4 +5,4 @@ ebti_SOURCES = main.c \
                parse.h parse.c \
                optimize.h optimize.c \
                tape.h tape.c \
-               evap.h eval.c
+               eval.h eval.c
