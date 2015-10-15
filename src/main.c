@@ -22,6 +22,8 @@ along with ebti.  If not, see <http://www.gnu.org/licenses/>.
 #include <getopt.h>
 #include "parse.h"
 #include "optimize.h"
+#include "eval.h"
+#include "tape.h"
 
 void usage (void);
 void version (void);
@@ -75,10 +77,9 @@ main (int argc, char **argv)
   instruction_list *insts = parse_brainfuck (input);
   insts = optimize_brainfuck (insts);
   if (verbose_flag)
-    {
-      print_instructions (insts);
-      printf ("\n");
-    }
+    print_instructions (insts);
+
+  eval_brainfuck (insts);
 
   return 0;
 }

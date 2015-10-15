@@ -102,6 +102,13 @@ parse_brainfuck (FILE *f)
 void
 print_instructions (instruction_list *list)
 {
+  print_instructions_inner (list);
+  printf ("\n");
+}
+
+static void
+print_instructions_inner (instruction_list *list)
+{
   for (; list; list = list->rest)
     {
       switch (list->inst->type)
@@ -120,7 +127,7 @@ print_instructions (instruction_list *list)
           break;
         case INST_LOOP:
           printf ("[ ");
-          print_instructions (list->inst->argument.insts);
+          print_instructions_inner (list->inst->argument.insts);
           printf ("] ");
           break;
         case INST_CLEAR:
