@@ -25,6 +25,6 @@ along with etbi.  If not, see <http://www.gnu.org/licenses/>.
 tape *eval_brainfuck (instruction_list *);
 static tape *eval_sequence (tape *, instruction_list *);
 static tape *eval_instruction (tape *, instruction *);
-static tape *eval_loop (tape *, instruction_list *)
+static tape *eval_loop (tape *, instruction_list *);
 
 #endif
