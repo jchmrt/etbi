@@ -57,6 +57,8 @@ optimize_brainfuck (instruction_list *lst)
         case INST_LOOP:
           current->inst = optimize_loop (current->inst);
           break;
+        default:
+          break;
         }
     }
 

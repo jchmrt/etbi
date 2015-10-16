@@ -81,6 +81,8 @@ eval_instruction (tape *tape, instruction *inst)
       set_tape (tape, 0, 0);
       return tape;
     }
+
+  return tape;
 }
 
 /**
