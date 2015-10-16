@@ -75,8 +75,8 @@ static instruction *
 optimize_loop (instruction  *loop)
 {
   instruction_list *loop_insts = loop->argument.insts;
-  // Is the loop just a ALTER instruction, if it is that means that
-  // the only way in which it can end is clearing the current cell.
+  /* Is the loop just a ALTER instruction, if it is that means that
+     the only way in which it can end is clearing the current cell. */
   int is_clear_loop = (loop_insts->inst->type == INST_ALTER)
     && (loop_insts->rest == NULL);
 

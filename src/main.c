@@ -33,6 +33,9 @@ void version (void);
 
 static int verbose_flag;
 
+/**
+ * The entry point
+ */
 int
 main (int argc, char **argv)
 {
