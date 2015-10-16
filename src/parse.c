@@ -20,6 +20,8 @@ along with etbi.  If not, see <http://www.gnu.org/licenses/>.
 #include "parse.h"
 #include <stdlib.h>
 
+static void print_instructions_inner (instruction_list *);
+
 /**
  * Parse a brainfuck instruction_list from a FILE f, while the data is
  * parsed, similar instructions are merged immediatly.

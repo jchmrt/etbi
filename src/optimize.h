@@ -22,6 +22,5 @@ along with etbi.  If not, see <http://www.gnu.org/licenses/>.
 #include "parse.h"
 
 instruction_list *optimize_brainfuck (instruction_list *);
-static instruction *optimize_loop (instruction *);
 
 #endif

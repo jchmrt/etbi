@@ -19,6 +19,10 @@ nalong with etbi.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdio.h>
 #include "eval.h"
 
+static tape *eval_sequence (tape *, instruction_list *);
+static tape *eval_instruction (tape *, instruction *);
+static tape *eval_loop (tape *, instruction_list *);
+
 /**
  * Evaluate a list of brainfuck instructions, taking input from stdin
  * and pushing output to stdout. Return the end state of the tape.

@@ -20,6 +20,8 @@ along with etbi.  If not, see <http://www.gnu.org/licenses/>.
 #include "optimize.h"
 #include <stdlib.h>
 
+static instruction *optimize_loop (instruction *);
+
 /**
  * Take a instruction_list and return a version which is optimized by
  * removing empty instructions and replacing clearing loops by CLEAR

@@ -49,6 +49,5 @@ typedef struct instruction_t
 
 instruction_list *parse_brainfuck (FILE *);
 void print_instructions (instruction_list *);
-static void print_instructions_inner (instruction_list *);
 
 #endif

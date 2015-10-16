@@ -34,9 +34,5 @@ tape *move_tape (tape *, int);
 void alter_tape (tape *, int, char);
 void set_tape (tape *, int, char);
 char get_tape (tape *, int);
-static tape *initialize_tape_segment (tape *, tape *);
-static char *cell_at(tape *, int);
-static tape *tape_left (tape *);
-static tape *tape_right (tape *);
 
 #endif

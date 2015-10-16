@@ -20,6 +20,11 @@ along with etbi.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdlib.h>
 #include "tape.h"
 
+static tape *initialize_tape_segment (tape *, tape *);
+static char *cell_at(tape *, int);
+static tape *tape_left (tape *);
+static tape *tape_right (tape *);
+
 /**
  * Return a new initialized tape.
  */
