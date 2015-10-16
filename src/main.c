@@ -39,7 +39,7 @@ main (int argc, char **argv)
   struct option long_options[] =
     {
       {"verbose", no_argument, &verbose_flag, 1},
-      {"version", no_argument, NULL, 'v'},
+      {"version", no_argument, NULL, 'V'},
       {"help", no_argument, NULL, 'h'},
       {"example", required_argument, NULL, 'e'},
       {0, 0, 0, 0}
@@ -48,7 +48,7 @@ main (int argc, char **argv)
   int c, option_index = 0;
   char *input_file_name = NULL;
 
-  while ((c = getopt_long (argc, argv, "he:",
+  while ((c = getopt_long (argc, argv, "hVe:v",
                            long_options, &option_index))
          != -1)
     {
@@ -56,12 +56,14 @@ main (int argc, char **argv)
         {
         case 0:
           break;
-        case 'v':
+        case 'V':
           version();
           break;
         case 'h':
           usage ();
           break;
+        case 'v':
+          verbose_flag = 1;
         case 'e':
           input_file_name
             = (char *) malloc (strlen (EXAMPLE_PATH) + strlen (optarg)
