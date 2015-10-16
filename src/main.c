@@ -27,6 +27,7 @@ along with etbi.  If not, see <http://www.gnu.org/licenses/>.
 #include "eval.h"
 #include "tape.h"
 
+void perror_file (char *, char *);
 void usage (void);
 void version (void);
 
@@ -88,7 +89,7 @@ main (int argc, char **argv)
 
   if (!input)
     {
-      perror(PACKAGE);
+      perror_file(argv[0], input_file_name);
       return 1;
     }
 
@@ -101,6 +102,18 @@ main (int argc, char **argv)
   eval_brainfuck (insts);
 
   return 0;
+}
+
+void
+perror_file (char *prog_name, char *file_name)
+{
+  char *error_prefix = (char *)
+    malloc (strlen (prog_name) + strlen (file_name) + 3);
+  strcpy (error_prefix, prog_name);
+  strcat (error_prefix, ": ");
+  strcat (error_prefix, file_name);
+
+  perror (error_prefix);
 }
 
 /**
