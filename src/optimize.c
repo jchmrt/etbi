@@ -47,9 +47,9 @@ optimize_brainfuck (instruction_list *lst)
           if ((current->inst->argument.value == 0)
               && (current->rest != NULL))
             {
+              instruction_list *next = current->rest->rest;
               free (current->inst);
               current->inst = current->rest->inst;
-              instruction_list *next = current->rest->rest;
               free (current->rest);
               current->rest = next;
             }

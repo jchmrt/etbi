@@ -30,10 +30,11 @@ instruction_list *
 parse_brainfuck (FILE *f)
 {
   instruction_list *begin, *current;
+  char c;
+
   begin = NULL;
   current = begin;
 
-  char c;
 
   while ((c = fgetc (f)) != EOF)
     {

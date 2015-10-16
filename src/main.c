@@ -46,7 +46,10 @@ main (int argc, char **argv)
     };
 
   int c, option_index = 0;
+  FILE *input;
   char *input_file_name = NULL;
+
+  instruction_list *insts;
 
   while ((c = getopt_long (argc, argv, "hVe:v",
                            long_options, &option_index))
@@ -84,7 +87,6 @@ main (int argc, char **argv)
   if (optind < argc)
     input_file_name = argv[optind];
 
-  FILE *input;
   if (input_file_name)
     input = fopen (input_file_name, "r");
   else
@@ -97,7 +99,7 @@ main (int argc, char **argv)
     }
 
 
-  instruction_list *insts = parse_brainfuck (input);
+  insts = parse_brainfuck (input);
   insts = optimize_brainfuck (insts);
   if (verbose_flag)
     print_instructions (insts);
