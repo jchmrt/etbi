@@ -20,6 +20,8 @@ along with etbi.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdio.h>
 #include <stdlib.h>
 #include <getopt.h>
+#include <string.h>
+
 #include "parse.h"
 #include "optimize.h"
 #include "eval.h"
@@ -37,12 +39,15 @@ main (int argc, char **argv)
     {
       {"verbose", no_argument, &verbose_flag, 1},
       {"version", no_argument, NULL, 'v'},
-      {"help", no_argument, NULL, 'h'}
+      {"help", no_argument, NULL, 'h'},
+      {"example", required_argument, NULL, 'e'},
+      {0, 0, 0, 0}
     };
 
   int c, option_index = 0;
+  char *input_file_name = NULL;
 
-  while ((c = getopt_long (argc, argv, "h",
+  while ((c = getopt_long (argc, argv, "he:",
                            long_options, &option_index))
          != -1)
     {
@@ -56,6 +61,15 @@ main (int argc, char **argv)
         case 'h':
           usage ();
           break;
+        case 'e':
+          input_file_name
+            = (char *) malloc (strlen (EXAMPLE_PATH) + strlen (optarg)
+                               + strlen (BF_SUFFIX) + 2);
+          strcpy (input_file_name, EXAMPLE_PATH);
+          strcat (input_file_name, "/");
+          strcat (input_file_name, optarg);
+          strcat (input_file_name, BF_SUFFIX);
+          break;
         case '?':
           break;
         default:
@@ -63,9 +77,14 @@ main (int argc, char **argv)
         }
     }
 
-  FILE *input = stdin;
   if (optind < argc)
-    input = fopen (argv[optind], "r");
+    input_file_name = argv[optind];
+
+  FILE *input;
+  if (input_file_name)
+    input = fopen (input_file_name, "r");
+  else
+    input = stdin;
 
   if (!input)
     {
