@@ -28,7 +28,7 @@ along with etbi.  If not, see <http://www.gnu.org/licenses/>.
 #include "tape.h"
 
 void perror_file (char *, char *);
-void usage (void);
+void usage (char *);
 void version (void);
 
 static int verbose_flag;
@@ -60,7 +60,7 @@ main (int argc, char **argv)
           version();
           break;
         case 'h':
-          usage ();
+          usage (argv[0]);
           break;
         case 'v':
           verbose_flag = 1;
@@ -122,9 +122,25 @@ perror_file (char *prog_name, char *file_name)
  * Print usage message and exit normally
  */
 void
-usage ()
+usage (char *prog_name)
 {
-  puts ("usage: etbi [OPTION]... [FILE]");
+  printf
+    (PACKAGE_STRING "\n"
+     COPYRIGHT_STRING "\n"
+     "Endless tape brainfuck interpreter\n"
+     "\n"
+     "Usage: %s [OPTION]... [FILE]\n"
+     "\n"
+     "  -e, --example=NAME    Load example program\n"
+     "  -v, --verbose         Print extra debugging information\n"
+     "  -V, --version         Output version information and exit\n"
+     "  -h, --help            Display this help and exit\n"
+     "\n"
+     "NOTE: if no FILE is specified %s will default to\n"
+     "reading a brainfuck file from standard input\n"
+     "\n"
+     "Report bugs to <" PACKAGE_BUGREPORT ">\n",
+     prog_name, prog_name);
   exit(0);
 }
 
@@ -134,9 +150,11 @@ usage ()
 void
 version ()
 {
-  puts (PACKAGE_STRING);
-  puts ("License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>");
-  puts ("This is free software: you are free to change and redistribute it.");
-  puts ("There is NO WARRANTY, to the extent permitted by law.");
+  printf
+    (PACKAGE_STRING "\n"
+     COPYRIGHT_STRING "\n"
+     "License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>\n"
+     "This is free software: you are free to change and redistribute it.\n"
+     "There is NO WARRANTY, to the extent permitted by law.\n");
   exit(0);
 }
