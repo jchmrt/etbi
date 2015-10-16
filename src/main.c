@@ -74,6 +74,7 @@ main (int argc, char **argv)
           strcat (input_file_name, BF_SUFFIX);
           break;
         case '?':
+          usage (argv[0]);
           break;
         default:
           abort ();
