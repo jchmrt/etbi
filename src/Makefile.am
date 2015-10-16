@@ -1,6 +1,7 @@
 ## Process this file with automake to produce Makefile.in
 
-AM_CFLAGS = -DEXAMPLE_PATH=\"$(exampledir)\"
+AM_CFLAGS = -pedantic-errors -Werror -Wall \
+           -DEXAMPLE_PATH=\"$(exampledir)\"
 
 bin_PROGRAMS = etbi
 etbi_SOURCES = main.c \
