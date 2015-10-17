@@ -26,6 +26,7 @@ along with etbi.  If not, see <http://www.gnu.org/licenses/>.
 #include "optimize.h"
 #include "eval.h"
 #include "tape.h"
+#include "example.h"
 
 void perror_file (char *, char *);
 void usage (char *);
@@ -72,13 +73,7 @@ main (int argc, char **argv)
           verbose_flag = 1;
           break;
         case 'e':
-          input_file_name
-            = (char *) malloc (strlen (EXAMPLE_PATH) + strlen (optarg)
-                               + strlen (BF_SUFFIX) + 2);
-          strcpy (input_file_name, EXAMPLE_PATH);
-          strcat (input_file_name, "/");
-          strcat (input_file_name, optarg);
-          strcat (input_file_name, BF_SUFFIX);
+          input_file_name = example_path (optarg);
           break;
         case '?':
           usage (argv[0]);
