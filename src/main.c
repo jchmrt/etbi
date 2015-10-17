@@ -70,6 +70,7 @@ main (int argc, char **argv)
           break;
         case 'v':
           verbose_flag = 1;
+          break;
         case 'e':
           input_file_name
             = (char *) malloc (strlen (EXAMPLE_PATH) + strlen (optarg)
