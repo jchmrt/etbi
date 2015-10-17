@@ -30,7 +30,7 @@ instruction_list *
 parse_brainfuck (FILE *f)
 {
   instruction_list *begin, *current;
-  char c;
+  int c;
 
   begin = NULL;
   current = begin;
