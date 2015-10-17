@@ -8,4 +8,5 @@ etbi_SOURCES = main.c \
                parse.h parse.c \
                optimize.h optimize.c \
                tape.h tape.c \
-               eval.h eval.c
+               eval.h eval.c \
+               example.h example.c
