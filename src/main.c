@@ -29,6 +29,7 @@ along with etbi.  If not, see <http://www.gnu.org/licenses/>.
 #include "example.h"
 
 void perror_file (char *, char *);
+void print_example_list (char *);
 void usage (char *);
 void version (void);
 
@@ -46,6 +47,7 @@ main (int argc, char **argv)
       {"version", no_argument, NULL, 'V'},
       {"help", no_argument, NULL, 'h'},
       {"example", required_argument, NULL, 'e'},
+      {"list-examples", no_argument, NULL, 'l'},
       {0, 0, 0, 0}
     };
 
@@ -55,7 +57,7 @@ main (int argc, char **argv)
 
   instruction_list *insts;
 
-  while ((c = getopt_long (argc, argv, "hVe:v",
+  while ((c = getopt_long (argc, argv, "hVvle:",
                            long_options, &option_index))
          != -1)
     {
@@ -74,6 +76,9 @@ main (int argc, char **argv)
           break;
         case 'e':
           input_file_name = example_path (optarg);
+          break;
+        case 'l':
+          print_example_list (argv[0]);
           break;
         case '?':
           usage (argv[0]);
@@ -122,6 +127,26 @@ perror_file (char *prog_name, char *file_name)
   strcat (error_prefix, file_name);
 
   perror (error_prefix);
+}
+
+/**
+ * Print a message listing all available examples and how to execute
+ * them.
+ */
+void
+print_example_list (char *prog_name)
+{
+  char **examples = example_names ();
+
+  printf ("The following example brainfuck programs are available for execution:\n");
+  while (*examples)
+    {
+      printf ("%s ", *examples);
+      examples++;
+    }
+  printf ("\n\nYou can execute each one with %s -e NAME\n", prog_name);
+
+  exit (0);
 }
 
 /**
