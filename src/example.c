@@ -60,9 +60,12 @@ example_names ()
         name_length = (strlen (result.gl_pathv[i])
                        - directory_length
                        - strlen (BF_SUFFIX));
-      examples[i] = (char *) malloc (sizeof (char) * name_length);
+      examples[i] = (char *) malloc (sizeof (char)
+                                     /* +1 for '\0' */
+                                     * (name_length + 1));
       strncpy (examples[i], result.gl_pathv[i] + directory_length,
                name_length);
+      (examples[i])[name_length] = '\0';
     }
 
   examples[i] = NULL;
