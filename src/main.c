@@ -102,11 +102,15 @@ main (int argc, char **argv)
       return 1;
     }
 
-
   insts = parse_brainfuck (input);
   insts = optimize_brainfuck (insts);
+
   if (verbose_flag)
-    print_instructions (insts);
+    {
+      printf (" * Optimized instructions tree:\n\n");
+      print_instructions (insts);
+      printf ("\n * Output of execution:\n\n");
+    }
 
   eval_brainfuck (insts);
 
