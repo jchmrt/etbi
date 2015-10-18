@@ -1,3 +1,7 @@
+Because this project use autotools for building and also uses gnulib,
+you will have to initialize this project with ./bootstrap if you want
+to compile it from the source code repository.
+
 This project uses gnulib for portable getopt_long and memrchr
 functions. To update gnulib functions use:
 
