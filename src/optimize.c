@@ -86,6 +86,15 @@ optimize_loop (instruction  *loop)
       free (loop_insts->inst);
       free (loop_insts);
     }
+  else if ((loop_insts->inst->type == INST_MOVE)
+           && (abs (loop_insts->inst->argument.value) == 1)
+           && (loop_insts->rest == NULL))
+    {
+      loop->type = INST_SCAN;
+      loop->argument.value = loop_insts->inst->argument.value;
+      free (loop_insts->inst);
+      free (loop_insts);
+    }
   else
     loop->argument.insts = optimize_brainfuck (loop_insts);
 

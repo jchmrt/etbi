@@ -135,6 +135,11 @@ print_instructions_inner (instruction_list *list)
           break;
         case INST_CLEAR:
           printf ("clear ");
+          break;
+        case INST_SCAN:
+          printf ("scan_%s ", list->inst->argument.value > 0
+                  ? "right" : "left");
+          break;
         }
     }
 }

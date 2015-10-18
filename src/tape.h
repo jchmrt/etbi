@@ -34,5 +34,6 @@ tape *move_tape (tape *, int);
 void alter_tape (tape *, int, char);
 void set_tape (tape *, int, char);
 char get_tape (tape *, int);
+tape *scan_tape (tape *, int);
 
 #endif

@@ -80,6 +80,9 @@ eval_instruction (tape *tape, instruction *inst)
     case INST_CLEAR:
       set_tape (tape, 0, 0);
       return tape;
+    case INST_SCAN:
+      tape = scan_tape (tape, inst->argument.value);
+      return tape;
     }
 
   return tape;

@@ -28,7 +28,8 @@ enum instruction_type
     INST_PRINT,
     INST_READ,
     INST_LOOP,
-    INST_CLEAR
+    INST_CLEAR,
+    INST_SCAN
   };
 
 typedef struct instruction_list_t

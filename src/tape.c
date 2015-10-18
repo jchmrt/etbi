@@ -16,8 +16,10 @@ for more details.
 You should have received a copy of the GNU General Public License
 along with etbi.  If not, see <http://www.gnu.org/licenses/>.
 */
+#include <config.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "tape.h"
 
 static tape *initialize_tape_segment (tape *, tape *);
@@ -106,6 +108,44 @@ get_tape (tape *tape, int offset)
 {
   char *cell = cell_at (tape, offset);
   return *cell;
+}
+
+/**
+ * Return the TAPE moved towards the first cell set to 0 in DIRECTION.
+ */
+tape *
+scan_tape (tape *tape, int direction)
+{
+  char *cell;
+
+  if (tape->cells[tape->current_cell] == 0)
+    return tape;
+  else if (direction > 0)            /* right */
+    {
+      cell = memchr (tape->cells + tape->current_cell, 0,
+                     TAPE_SEGMENT_SIZE - tape->current_cell);
+
+      while (!cell)
+        {
+          tape = tape_right (tape);
+          cell = memchr (tape->cells, 0, TAPE_SEGMENT_SIZE);
+        }
+
+      tape->current_cell = cell - tape->cells;
+      return tape;
+    }
+  else                          /* left */
+    {
+      cell = memrchr (tape->cells, 0, tape->current_cell);
+      while (!cell)
+        {
+          tape = tape_left (tape);
+          cell = memrchr (tape->cells, 0, TAPE_SEGMENT_SIZE);
+        }
+
+      tape->current_cell = cell - tape->cells;
+      return tape;
+    }
 }
 
 
