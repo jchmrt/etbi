@@ -1,0 +1,6 @@
+This project uses gnulib for portable getopt_long and memrchr
+functions. To update gnulib functions use:
+
+$ git syncsub
+$ git add .gnulib
+$ ./bootstrap
