@@ -1,2 +1,29 @@
-etbi - a brainfuck interpreter featuring an endless tape in both
-directions
+                                _   _     _
+                            ___| |_| |__ (_)
+                           / _ \ __| '_ \| |
+                          |  __/ |_| |_) | |
+                           \___|\__|_.__/|_|
+
+ a brainfuck interpreter featuring an endless tape in both directions
+
+----------------------------------------------------------------------
+
+etbi can interpret brainfuck source files with an endless tape of
+cells with the size of a char, initially set to 0. Use it with `etbi
+FILE`, or run one of the built-in examples with `etbi -e NAME`. You
+can always get help with `etbi --help`.
+
+etbi implements a few simple optimizations:
+- Movement contraction: multiple movement instructions following
+  each other are added together to one instruction with an argument.
+- Alteration contraction: multiple alteration instructions following
+  each other are added together to one instruction with an argument.
+- Clear loop optimization: loops which can only end with the current
+  cell ending up empty such as '[-]' are converted to a single clear
+  instruction which sets the current cell to 0.
+- Scan loop optimization: loops which are scanning all cells in a
+  direction until they find one set to 0, such as '[>]' are converted
+  to a single instruction which uses memchr or memrchr to find one
+  faster.
+
+To install etbi simply run `./configure && make && sudo make install`.
