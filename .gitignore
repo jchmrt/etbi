@@ -10,8 +10,6 @@ Makefile.in
 /stamp-h?
 .deps/
 .dirstamp
-Makefile
-Makefile.in
 /missing
 /install-sh
 /depcomp
