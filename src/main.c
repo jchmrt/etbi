@@ -56,6 +56,7 @@ main (int argc, char **argv)
   char *input_file_name = NULL;
 
   instruction_list *insts;
+  tape *tape;
 
   while ((c = getopt_long (argc, argv, "hVvle:",
                            long_options, &option_index))
@@ -112,7 +113,13 @@ main (int argc, char **argv)
       printf ("\n * Output of execution:\n\n");
     }
 
-  eval_brainfuck (insts);
+  tape = eval_brainfuck (insts);
+
+  if (verbose_flag)
+    {
+      printf (" * End state of the tape:\n\n");
+      print_entire_tape (tape);
+    }
 
   return 0;
 }

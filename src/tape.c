@@ -27,6 +27,11 @@ static char *cell_at(tape *, int);
 static tape *tape_left (tape *);
 static tape *tape_right (tape *);
 
+static void print_cells (char *, int, char *);
+
+static char *first_non_zero (char *, size_t);
+static char *last_non_zero (char *, size_t);
+
 /**
  * Return a new initialized tape.
  */
@@ -150,6 +155,94 @@ scan_tape (tape *tape, int direction)
 
 
 
+void
+print_entire_tape (tape *current_tape)
+{
+  tape *begin_tape = current_tape, *end_tape = current_tape;
+  char
+    *begin_cell,
+    *end_cell,
+    *current_cell = current_tape->cells + current_tape->current_cell;
+  int begin_offset, end_offset;
+
+  /* Get the beginning of non-zero cells */
+  while (begin_tape->left)
+    begin_tape = begin_tape->left;
+
+  while ((begin_cell
+          = first_non_zero (begin_tape->cells, TAPE_SEGMENT_SIZE))
+         == NULL)
+    {
+      if (begin_tape->right)
+        begin_tape = begin_tape->right;
+      else
+        {
+          printf ("... 0 ...\n");
+          return;
+        }
+    }
+
+  begin_offset = begin_cell - begin_tape->cells;
+
+  /* Get the end of non-zero cells */
+  while (end_tape->right)
+    end_tape = end_tape->right;
+
+  while ((end_cell
+          = last_non_zero (end_tape->cells, TAPE_SEGMENT_SIZE))
+         == NULL)
+    {
+      if (end_tape->left)
+        end_tape = end_tape->left;
+      else
+        {
+          printf ("... 0 ...\n");
+          return;
+        }
+    }
+
+  end_offset = end_cell - end_tape->cells;
+
+  /* Print the non-zero cells */
+  printf ("... ");
+  if (begin_tape != end_tape)
+    print_cells (begin_tape->cells + begin_offset,
+                 TAPE_SEGMENT_SIZE - begin_offset,
+                 current_cell);
+  else
+    {
+      print_cells (begin_tape->cells + begin_offset,
+                   end_offset - begin_offset,
+                   current_cell);
+     printf ("...\n");
+     return;
+    }
+  
+  while (begin_tape != end_tape)
+    {
+      print_cells (begin_tape->cells, TAPE_SEGMENT_SIZE, current_cell);
+      begin_tape = begin_tape->right;
+    }
+
+  print_cells (end_tape->cells,
+               end_offset,
+               current_cell);
+
+  printf ("...\n");
+}
+
+static void
+print_cells (char *cells, int n, char *current)
+{
+  for (; n > 0; n--, cells++)
+    if (cells == current)
+      printf ("<%d> ", (int) *cells);
+    else
+      printf ("%d ", (int) *cells);
+}
+
+
+
 /**
  * Return a new initialized tape segment, with left set to LEFT and
  * right set to RIGHT. The cells are initialized to 0, but
@@ -229,4 +322,26 @@ tape_right (tape *tape)
     tape->right = initialize_tape_segment(tape, NULL);
 
   return tape->right;
+}
+
+
+
+static char *
+first_non_zero (char *s, size_t n)
+{
+  for (; n > 0; s++, n--)
+    if (*s)
+      return s;
+
+  return NULL;
+}
+
+static char *
+last_non_zero (char *s, size_t n)
+{
+  for (s += n; n > 0; s--, n--)
+    if (*s)
+      return s;
+
+  return NULL;
 }
