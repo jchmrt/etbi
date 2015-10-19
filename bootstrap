@@ -1,6 +1,6 @@
 #! /bin/sh
 # Print a version string.
-scriptversion=2014-12-08.12; # UTC
+scriptversion=2015-10-19.11; # UTC
 
 # Bootstrap this package from checked-out sources.
 
@@ -113,7 +113,7 @@ die() { warn_ "$@"; exit 1; }
 gnulib_mk=gnulib.mk
 
 # List of gnulib modules needed.
-gnulib_modules=
+gnulib_modules="getopt-gnu memrchr"
 
 # Any gnulib files needed that are not in modules.
 gnulib_files=
