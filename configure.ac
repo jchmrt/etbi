@@ -23,6 +23,34 @@ AM_INIT_AUTOMAKE([-Wall -Werror foreign])
 AC_PROG_CC
 gl_EARLY
 
+AC_ARG_WITH([readline],
+  [AS_HELP_STRING([--with-readline],
+    [support fancy command line editing @<:@default=check@:>@])],
+  [],
+  [with_readline=check])
+
+LIBREADLINE=
+AS_IF([test "x$with_readline" != xno],
+  [AC_CHECK_LIB([readline], [main],
+    [AC_SUBST([LIBREADLINE], ["-lreadline -lncurses $READLINE_EXTRA"])
+     AC_DEFINE([HAVE_LIBREADLINE], [1],
+               [Define if you have libreadline])
+    for termlib in ncurses curses termcap terminfo termlib ; do
+     	AC_CHECK_LIB(${termlib}, tgoto,
+		[READLINE_EXTRA="-l${termlib}"; break])
+    done
+    ],
+    [if test "x$with_readline" != xcheck; then
+       AC_MSG_FAILURE(
+         [--with-readline was given, but test for readline failed])
+     fi
+    ], )])
+
+
+READLINE_LIBS="$LIBREADLINE $READLINE_EXTRA"
+
+AC_SUBST(READLINE_LIBS)
+
 AC_SUBST(exampledir, "\$(docdir)/examples")
 
 AC_DEFINE(BF_SUFFIX, ".b")

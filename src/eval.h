@@ -23,5 +23,6 @@ along with etbi.  If not, see <http://www.gnu.org/licenses/>.
 #include "tape.h"
 
 tape *eval_brainfuck (instruction_list *);
+tape *eval_sequence (tape *, instruction_list *);
 
 #endif

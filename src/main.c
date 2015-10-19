@@ -27,6 +27,7 @@ along with etbi.  If not, see <http://www.gnu.org/licenses/>.
 #include "eval.h"
 #include "tape.h"
 #include "example.h"
+#include "interactive.h"
 
 void perror_file (char *, char *);
 void print_example_list (char *);
@@ -48,6 +49,7 @@ main (int argc, char **argv)
       {"help", no_argument, NULL, 'h'},
       {"example", required_argument, NULL, 'e'},
       {"list-examples", no_argument, NULL, 'l'},
+      {"interactive", no_argument, NULL, 'i'},
       {0, 0, 0, 0}
     };
 
@@ -58,7 +60,7 @@ main (int argc, char **argv)
   instruction_list *insts;
   tape *tape;
 
-  while ((c = getopt_long (argc, argv, "hVvle:",
+  while ((c = getopt_long (argc, argv, "hVvlie:",
                            long_options, &option_index))
          != -1)
     {
@@ -81,6 +83,9 @@ main (int argc, char **argv)
         case 'l':
           print_example_list (argv[0]);
           break;
+        case 'i':
+          interactive_session ();
+          return 0;
         case '?':
           usage (argv[0]);
           break;

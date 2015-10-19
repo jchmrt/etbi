@@ -19,7 +19,6 @@ nalong with etbi.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdio.h>
 #include "eval.h"
 
-static tape *eval_sequence (tape *, instruction_list *);
 static tape *eval_instruction (tape *, instruction *);
 static tape *eval_loop (tape *, instruction_list *);
 
@@ -41,7 +40,7 @@ eval_brainfuck (instruction_list *insts)
  * Evaluate a list of brainfuck instructions with as initial tape TAPE
  * and return the end state of the tape.
  */
-static tape *
+tape *
 eval_sequence (tape *tape, instruction_list *insts)
 {
   for (; insts; insts = insts->rest)

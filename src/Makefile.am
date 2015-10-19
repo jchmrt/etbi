@@ -21,10 +21,13 @@ AM_CFLAGS = -pedantic-errors -Werror -Wall \
            -DEXAMPLE_PATH=\"$(exampledir)\" \
            -I$(top_builddir)/lib -I$(top_srcdir)/lib # for gnulib
 
+etbi_LDADD = $(READLINE_LIBS)
+
 bin_PROGRAMS = etbi
 etbi_SOURCES = main.c \
                parse.h parse.c \
                optimize.h optimize.c \
                tape.h tape.c \
                eval.h eval.c \
-               example.h example.c
+               example.h example.c \
+               interactive.h interactive.c
