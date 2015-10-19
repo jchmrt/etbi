@@ -32,7 +32,7 @@ AC_ARG_WITH([readline],
 LIBREADLINE=
 AS_IF([test "x$with_readline" != xno],
   [AC_CHECK_LIB([readline], [main],
-    [AC_SUBST([LIBREADLINE], ["-lreadline -lncurses $READLINE_EXTRA"])
+    [AC_SUBST([LIBREADLINE], ["-lreadline $READLINE_EXTRA"])
      AC_DEFINE([HAVE_LIBREADLINE], [1],
                [Define if you have libreadline])
     for termlib in ncurses curses termcap terminfo termlib ; do
