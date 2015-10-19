@@ -23,13 +23,27 @@ along with etbi.  If not, see <http://www.gnu.org/licenses/>.
 
 enum instruction_type
   {
-    INST_MOVE = 1,
-    INST_ALTER,
-    INST_PRINT,
-    INST_READ,
-    INST_LOOP,
-    INST_CLEAR,
-    INST_SCAN
+    /* Move by ARG cells */
+    INST_MOVE = 1, /* move instruction   argument: int */
+
+    /* Alter current cell by ARG */
+    INST_ALTER,    /* alter instruction  argument: int */
+
+    /* Print the current cell */
+    INST_PRINT,    /* print instruction  argument: none */
+
+    /* Read into the current cell */
+    INST_READ,     /* read instruction   argument: none */
+
+    /* Loop the ARG while current cell isn't zero */
+    INST_LOOP,     /* loop instruction   argument: instruction_list */
+
+    /* Clear the current cell */
+    INST_CLEAR,    /* clear instruction  argument: none */
+
+    /* Scan for a zero cell to the left if ARG is negative and to the
+       right if ARG is positive */
+    INST_SCAN      /* scan instruction   argument: int */
   };
 
 typedef struct instruction_list_t

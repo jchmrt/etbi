@@ -155,6 +155,11 @@ scan_tape (tape *tape, int direction)
 
 
 
+/**
+ * Print CURRENT_TAPE from the leftmost non-zero cell or the current
+ * cell, whichever comes first, to the rightmost non-zero cell or the
+ * current cell, whichever comes last.
+ */
 void
 print_entire_tape (tape *current_tape)
 {
@@ -252,6 +257,10 @@ print_entire_tape (tape *current_tape)
     }
 }
 
+/**
+ * Print N cells starting from CELLS, printing the value of the
+ * current cell in the special form "<value> ".
+ */
 static void
 print_cells (char *cells, int n, char *current)
 {
@@ -347,6 +356,10 @@ tape_right (tape *tape)
 
 
 
+/**
+ * Return a pointer to the first non-zero char in the N chars pointed
+ * to by S.
+ */
 static char *
 first_non_zero (char *s, size_t n)
 {
@@ -357,6 +370,10 @@ first_non_zero (char *s, size_t n)
   return NULL;
 }
 
+/**
+ * Return the a pointer to the last non-zero char in the N chars
+ * pointed to by S.
+ */
 static char *
 last_non_zero (char *s, size_t n)
 {
