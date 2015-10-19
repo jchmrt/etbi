@@ -360,7 +360,7 @@ first_non_zero (char *s, size_t n)
 static char *
 last_non_zero (char *s, size_t n)
 {
-  for (s += n; n > 0; s--, n--)
+  for (s += n-1; n > 0; s--, n--)
     if (*s)
       return s;
 
