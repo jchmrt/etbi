@@ -31,3 +31,6 @@ etbi implements a few simple optimizations:
   faster.
 
 To install etbi simply run `./configure && make && sudo make install`.
+
+etbi is licensed under the GPLv3+, see `COPYING' for the full license
+text.
