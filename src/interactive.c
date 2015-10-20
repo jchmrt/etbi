@@ -88,7 +88,9 @@ interactive_help ()
           "\n"
           " !preview CODE    - Preview the optimized code generated from CODE\n"
           " !verbose CODE    - Print the optimized code generated from CODE before\n"
-          "                    executing it\n");
+          "                    executing it\n"
+          " !clear           - Reset the tape to the initial state of only zeroes\n"
+          " !help            - Print this help message\n");
 }
 
 
@@ -151,6 +153,11 @@ process_command (tape *current_tape, char *command)
         }
       else
         printf ("Verbose needs one argument\n");
+    }
+  else if (strcmp (first, "clear") == 0)
+    {
+      current_tape = initialize_tape ();
+      print_entire_tape (current_tape);
     }
   else if (strcmp (first, "help") == 0)
     interactive_help ();
