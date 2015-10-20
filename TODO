@@ -1,0 +1,6 @@
+#+SEQ_TODO: BUG(b) KNOWNCAUSE(k) | FIXED(F)
+#+SEQ_TODO: FEATURE(f) | DONE(d) CANCELED(c)
+
+* Bugs
+** FIXED printing of multiple tape segments completely fucked up
+   CLOSED: [2015-10-20 di 17:53]
