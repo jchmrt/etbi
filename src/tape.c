@@ -196,10 +196,14 @@ print_entire_tape (tape *current_tape)
         }
     }
 
-  begin_offset = begin_is_current
-    ? current_tape->current_cell
-    : ((begin_cell - begin_tape->cells) < current_tape->current_cell
-       ? begin_cell - begin_tape->cells : current_tape->current_cell);
+
+  if (begin_is_current)
+    begin_offset = current_tape->current_cell;
+  else
+    begin_offset = begin_tape == current_tape
+      ? ((begin_cell - current_tape->cells) < current_tape->current_cell
+         ? begin_cell - current_tape->cells : current_tape->current_cell)
+      : begin_cell - begin_tape->cells;
 
   /* Get the end of non-zero cells */
   while (end_tape->right)
@@ -227,6 +231,14 @@ print_entire_tape (tape *current_tape)
     ? current_tape->current_cell
     : ((end_cell - end_tape->cells) > current_tape->current_cell
        ? end_cell - end_tape->cells : current_tape->current_cell);
+  if (end_is_current)
+    end_offset = current_tape->current_cell;
+  else
+    end_offset = end_tape == current_tape
+      ? ((end_cell - current_tape->cells) > current_tape->current_cell
+         ? end_cell - current_tape->cells : current_tape->current_cell)
+      : end_cell - end_tape->cells;
+
 
   /* Print the non-zero cells */
   printf ("... ");
@@ -236,6 +248,7 @@ print_entire_tape (tape *current_tape)
                    TAPE_SEGMENT_SIZE - begin_offset,
                    current_cell);
 
+      begin_tape = begin_tape->right;
       while (begin_tape != end_tape)
         {
           print_cells (begin_tape->cells, TAPE_SEGMENT_SIZE, current_cell);
