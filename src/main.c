@@ -176,8 +176,11 @@ usage (char *prog_name)
      "Endless tape brainfuck interpreter\n"
      "\n"
      "Usage: %s [OPTION]... [FILE]\n"
-     "\n"
-     "  -e, --example=NAME    Load example program\n"
+     "\n", prog_name);
+  printf
+    ("  -e, --example=NAME    Load example program\n"
+     "  -l, --list-examples   List all possible example names\n"
+     "  -i, --interactive     Start etbi in interactive mode\n"
      "  -v, --verbose         Print extra debugging information\n"
      "  -V, --version         Output version information and exit\n"
      "  -h, --help            Display this help and exit\n"
@@ -186,7 +189,7 @@ usage (char *prog_name)
      "reading a brainfuck file from standard input\n"
      "\n"
      "Report bugs to <" PACKAGE_BUGREPORT ">\n",
-     prog_name, prog_name);
+     prog_name);
   exit (0);
 }
 
