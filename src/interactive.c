@@ -36,12 +36,16 @@ static void initialize_readline (void);
 
 #define PROMPT "etbi> "
 
+static void interactive_notice ();
+static void interactive_help ();
+
 static tape *process_input (tape *, char *);
 static tape *process_brainfuck (tape *, char *);
 static tape *process_command (tape *, char *);
 static char *prompt_for_input (char *);
-
 static char *split_command (char **);
+
+
 
 void
 interactive_session ()
@@ -49,21 +53,45 @@ interactive_session ()
   char *line;
   tape *tape = initialize_tape ();
 
-  printf (PACKAGE_STRING "\n"
-          COPYRIGHT_STRING "\n"
-          "etbi comes with ABSOLUTELY NO WARRANTY.\n"
-          "This program is free software, and you are welcome to redistribute it\n"
-          "under certain conditions; type the file `COPYING' for details.\n\n");
-
 #ifdef HAVE_LIBREADLINE
   initialize_readline ();
 #endif
+
+  interactive_notice ();
 
   while ((line = prompt_for_input (PROMPT)) != NULL)
       tape = process_input (tape, line);
 
   printf ("\n");
 }
+
+static void
+interactive_notice ()
+{
+  printf (PACKAGE_STRING "\n"
+          COPYRIGHT_STRING "\n"
+          "etbi comes with ABSOLUTELY NO WARRANTY.\n"
+          "This program is free software, and you are welcome to redistribute it\n"
+          "under certain conditions; type the file `COPYING' for details.\n"
+          "\n"
+          "Enter `!help' for help\n");
+}
+
+static void
+interactive_help ()
+{
+  printf ("You can execute brainfuck code by typing it in and hitting enter, after\n"
+          "which you are shown the new state of the tape or you can use one of the\n"
+          "commands listed below.\n"
+          "\n"
+          "Available commands:\n"
+          "\n"
+          " !preview CODE    - Preview the optimized code generated from CODE\n"
+          " !verbose CODE    - Print the optimized code generated from CODE before\n"
+          "                    executing it\n");
+}
+
+
 
 static tape *
 process_input (tape *current_tape, char *input)
@@ -124,11 +152,35 @@ process_command (tape *current_tape, char *command)
       else
         printf ("Verbose needs one argument\n");
     }
+  else if (strcmp (first, "help") == 0)
+    interactive_help ();
   else
     printf ("Not a valid command: %s\n", first);
 
   return current_tape;
 }
+
+static char *
+split_command (char **command)
+{
+  char *first, *all = *command;
+  int size = 0;
+
+  for (; **command != ' '; (*command)++, size++)
+    if (**command == '\0')
+      {
+        *command = NULL;
+        break;
+      }
+  first = (char *) malloc (sizeof (char) * (size+1));
+
+  strncpy (first, all, size);
+  first[size] = '\0';
+
+  return first;
+}
+
+
 
 #ifdef HAVE_LIBREADLINE
 static void
@@ -169,24 +221,4 @@ prompt_for_input (char* prompt)
 #endif
 
   return input;
-}
-
-static char *
-split_command (char **command)
-{
-  char *first, *all = *command;
-  int size = 0;
-
-  for (; **command != ' '; (*command)++, size++)
-    if (**command == '\0')
-      {
-        *command = NULL;
-        break;
-      }
-  first = (char *) malloc (sizeof (char) * (size+1));
-
-  strncpy (first, all, size);
-  first[size] = '\0';
-
-  return first;
 }
