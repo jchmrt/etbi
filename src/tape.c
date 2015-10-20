@@ -279,9 +279,9 @@ print_cells (char *cells, int n, char *current)
 {
   for (; n > 0; n--, cells++)
     if (cells == current)
-      printf ("<%d> ", (int) *cells);
+      printf ("<%u> ", (unsigned char) *cells);
     else
-      printf ("%d ", (int) *cells);
+      printf ("%u ", (unsigned char) *cells);
 }
 
 
