@@ -22,6 +22,19 @@ along with etbi.  If not, see <http://www.gnu.org/licenses/>.
 
 static void print_instructions_inner (instruction_list *);
 
+instruction_list *
+parse_brainfuck_string (char *input)
+{
+  FILE *tmp_file = tmpfile ();
+
+  while (*input != '\0')
+    fputc (*(input++), tmp_file);
+
+  fseek (tmp_file, 0, SEEK_SET);
+
+  return parse_brainfuck (tmp_file);
+}
+
 /**
  * Parse a brainfuck instruction_list from a FILE f, while the data is
  * parsed, similar instructions are merged immediatly.

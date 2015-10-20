@@ -62,6 +62,7 @@ typedef struct instruction_t
   } argument;
 } instruction;
 
+instruction_list *parse_brainfuck_string (char *);
 instruction_list *parse_brainfuck (FILE *);
 void print_instructions (instruction_list *);
 

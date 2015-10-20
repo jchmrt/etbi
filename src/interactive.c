@@ -19,8 +19,8 @@ along with etbi.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "config.h"
 #include <stdlib.h>
-#include <unistd.h>
 #include <stdio.h>
+#include <string.h>
 
 #ifdef HAVE_LIBREADLINE
 #    include <readline/history.h>
@@ -36,40 +36,98 @@ static void initialize_readline (void);
 
 #define PROMPT "etbi> "
 
+static tape *process_input (tape *, char *);
+static tape *process_brainfuck (tape *, char *);
+static tape *process_command (tape *, char *);
 static char *prompt_for_input (char *);
+
+static char *split_command (char **);
 
 void
 interactive_session ()
 {
   char *line;
-  FILE *tmp_file;
   tape *tape = initialize_tape ();
-  instruction_list *insts;
+
+  printf (PACKAGE_STRING "\n"
+          COPYRIGHT_STRING "\n"
+          "etbi comes with ABSOLUTELY NO WARRANTY.\n"
+          "This program is free software, and you are welcome to redistribute it\n"
+          "under certain conditions; type the file `COPYING' for details.\n\n");
 
 #ifdef HAVE_LIBREADLINE
   initialize_readline ();
 #endif
 
   while ((line = prompt_for_input (PROMPT)) != NULL)
-    {
-      char *tmp = line;
-      tmp_file = tmpfile ();
-
-      while (*tmp != '\0')
-        fputc (*(tmp++), tmp_file);
-
-      fseek (tmp_file, 0, SEEK_SET);
-
-      insts = parse_brainfuck (tmp_file);
-      insts = optimize_brainfuck (insts);
-      tape = eval_sequence (tape, insts);
-
-      print_entire_tape (tape);
-
-      free (line);
-    }
+      tape = process_input (tape, line);
 
   printf ("\n");
+}
+
+static tape *
+process_input (tape *current_tape, char *input)
+{
+  if (*input == '!')
+      return process_command (current_tape, input+1);
+  else
+    return process_brainfuck (current_tape, input);
+}
+
+static tape *
+process_brainfuck (tape *current_tape, char *input)
+{
+  char *tmp = input;
+  instruction_list *insts;
+
+  insts = parse_brainfuck_string (tmp);
+  insts = optimize_brainfuck (insts);
+  current_tape = eval_sequence (current_tape, insts);
+
+  print_entire_tape (current_tape);
+
+  free (input);
+
+  return current_tape;
+}
+
+static tape *
+process_command (tape *current_tape, char *command)
+{
+  char *first = split_command (&command);
+  instruction_list *insts;
+
+  if (strcmp (first, "preview") == 0)
+    {
+      if (command)
+        {
+          insts = parse_brainfuck_string (command);
+          insts = optimize_brainfuck (insts);
+          printf ("instructions generated:\n");
+          print_instructions (insts);
+        }
+      else
+        printf ("Preview needs one argument\n");
+    }
+  else if (strcmp (first, "verbose") == 0)
+    {
+      if (command)
+        {
+          insts = parse_brainfuck_string (command);
+          insts = optimize_brainfuck (insts);
+          printf ("instructions generated:\n");
+          print_instructions (insts);
+          printf("\n");
+          current_tape = eval_sequence (current_tape, insts);
+          print_entire_tape (current_tape);
+        }
+      else
+        printf ("Verbose needs one argument\n");
+    }
+  else
+    printf ("Not a valid command: %s\n", first);
+
+  return current_tape;
 }
 
 #ifdef HAVE_LIBREADLINE
@@ -111,4 +169,24 @@ prompt_for_input (char* prompt)
 #endif
 
   return input;
+}
+
+static char *
+split_command (char **command)
+{
+  char *first, *all = *command;
+  int size = 0;
+
+  for (; **command != ' '; (*command)++, size++)
+    if (**command == '\0')
+      {
+        *command = NULL;
+        break;
+      }
+  first = (char *) malloc (sizeof (char) * (size+1));
+
+  strncpy (first, all, size);
+  first[size] = '\0';
+
+  return first;
 }
