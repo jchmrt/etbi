@@ -50,7 +50,9 @@ static tape *read_tape (char *);
 static char *prompt_for_input (char *);
 
 
-
+/**
+ * Start a interactive etbi session.
+ */
 void
 interactive_session ()
 {
@@ -69,6 +71,9 @@ interactive_session ()
   printf ("\n");
 }
 
+/**
+ * Print the start notice for an interactive session
+ */
 static void
 interactive_notice ()
 {
@@ -81,6 +86,9 @@ interactive_notice ()
           "Enter `!help' for help\n");
 }
 
+/**
+ * Process the help with the argument ARG.
+ */
 static void
 interactive_help (char *arg)
 {
@@ -114,6 +122,10 @@ interactive_help (char *arg)
 
 
 
+/**
+ * Process the INPUT with the CURRENT_TAPE and return the new state of
+ * the tape.
+ */
 static tape *
 process_input (tape *current_tape, char *input)
 {
@@ -123,6 +135,10 @@ process_input (tape *current_tape, char *input)
     return process_brainfuck (current_tape, input);
 }
 
+/**
+ * Process INPUT as brainfuck code with CURRENT_TAPE and return the
+ * new state of the tape.
+ */
 static tape *
 process_brainfuck (tape *current_tape, char *input)
 {
@@ -140,6 +156,10 @@ process_brainfuck (tape *current_tape, char *input)
   return current_tape;
 }
 
+/**
+ * Process COMMAND as a command with the CURRENT_TAPE and return the
+ * new state of the tape.
+ */
 static tape *
 process_command (tape *current_tape, char *command)
 {
@@ -202,6 +222,10 @@ process_command (tape *current_tape, char *command)
   return current_tape;
 }
 
+/**
+ * Split COMMAND into the first word and the rest. The first word is
+ * returned and COMMAND is set to point to the rest.
+ */
 static char *
 split_word (char **command)
 {
@@ -228,6 +252,9 @@ split_word (char **command)
 
 
 
+/**
+ * Print the help message for !read-tape
+ */
 static void
 read_tape_help ()
 {
@@ -245,6 +272,9 @@ read_tape_help ()
      "-> ... 18 0 255 12 <28> 5 0 0 29 0 1 ...\n");
 }
 
+/**
+ * Read the tape from TAPE_STR and return the read tape
+ */
 static tape *
 read_tape (char *tape_str)
 {
@@ -347,6 +377,9 @@ read_tape (char *tape_str)
 
 
 
+/**
+ * Initialize readline, only callable if readline is available
+ */
 #ifdef HAVE_LIBREADLINE
 static void
 initialize_readline ()
@@ -357,6 +390,11 @@ initialize_readline ()
 }
 #endif
 
+/**
+ * Prompt for input using readline and add it to history if readline
+ * is available, else print the prompt using printf and get a line
+ * with getline. Return the input as a string without the '\n'.
+ */
 static char *
 prompt_for_input (char* prompt)
 {

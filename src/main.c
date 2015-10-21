@@ -173,7 +173,7 @@ usage (char *prog_name)
   printf
     (PACKAGE_STRING "\n"
      COPYRIGHT_STRING "\n"
-     "Endless tape brainfuck interpreter\n"
+     "Endless Tape Brainfuck Interpreter\n"
      "\n"
      "Usage: %s [OPTION]... [FILE]\n"
      "\n", prog_name);
