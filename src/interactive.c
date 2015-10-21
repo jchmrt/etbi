@@ -37,13 +37,17 @@ static void initialize_readline (void);
 #define PROMPT "etbi> "
 
 static void interactive_notice ();
-static void interactive_help ();
+static void interactive_help (char *);
 
 static tape *process_input (tape *, char *);
 static tape *process_brainfuck (tape *, char *);
 static tape *process_command (tape *, char *);
+static char *split_word (char **);
+
+static void read_tape_help ();
+static tape *read_tape (char *);
+
 static char *prompt_for_input (char *);
-static char *split_command (char **);
 
 
 
@@ -78,19 +82,34 @@ interactive_notice ()
 }
 
 static void
-interactive_help ()
+interactive_help (char *arg)
 {
-  printf ("You can execute brainfuck code by typing it in and hitting enter, after\n"
-          "which you are shown the new state of the tape or you can use one of the\n"
-          "commands listed below.\n"
-          "\n"
-          "Available commands:\n"
-          "\n"
-          " !preview CODE    - Preview the optimized code generated from CODE\n"
-          " !verbose CODE    - Print the optimized code generated from CODE before\n"
-          "                    executing it\n"
-          " !clear           - Reset the tape to the initial state of only zeroes\n"
-          " !help            - Print this help message\n");
+  if (arg == NULL)
+    {
+      printf
+        ("You can execute brainfuck code by typing it in and hitting enter, after\n"
+         "which you are shown the new state of the tape or you can use one of the\n"
+         "commands listed below.\n"
+         "\n"
+         "Available commands:\n"
+         "\n");
+      printf
+        (" !preview CODE    - Preview the optimized code generated from CODE\n"
+         " !verbose CODE    - Print the optimized code generated from CODE before\n"
+         "                    executing it\n"
+         " !read-tape TAPE  - Set the tape to the state read from TAPE\n"
+         " !clear           - Reset the tape to the initial state of only zeroes\n"
+         " !help [COMMAND]  - Print this help message or if given an argument,\n"
+         "                    print the help for COMMAND if it exists\n");
+    }
+  else
+    {
+      if (strcmp (arg, "read-tape") == 0)
+        read_tape_help ();
+      else
+        printf ("No help available for %s\n", arg);
+
+    }
 }
 
 
@@ -124,7 +143,7 @@ process_brainfuck (tape *current_tape, char *input)
 static tape *
 process_command (tape *current_tape, char *command)
 {
-  char *first = split_command (&command);
+  char *first = split_word (&command);
   instruction_list *insts;
 
   if (strcmp (first, "preview") == 0)
@@ -159,16 +178,32 @@ process_command (tape *current_tape, char *command)
       current_tape = initialize_tape ();
       print_entire_tape (current_tape);
     }
+  else if (strcmp (first, "read-tape") == 0)
+    {
+      if (command)
+        {
+          tape *tmp_tape = read_tape (command);
+          if (tmp_tape)
+            {
+              current_tape = tmp_tape;
+              print_entire_tape (current_tape);
+            }
+        }
+      else
+        printf ("Read-tape needs a tape as argument, see !help read-tape\n");
+    }
   else if (strcmp (first, "help") == 0)
-    interactive_help ();
+    interactive_help (command);
   else
     printf ("Not a valid command: %s\n", first);
+
+  free (first);
 
   return current_tape;
 }
 
 static char *
-split_command (char **command)
+split_word (char **command)
 {
   char *first, *all = *command;
   int size = 0;
@@ -179,12 +214,135 @@ split_command (char **command)
         *command = NULL;
         break;
       }
+
+  if (*command)
+    (*command)++;
+
   first = (char *) malloc (sizeof (char) * (size+1));
 
   strncpy (first, all, size);
   first[size] = '\0';
 
   return first;
+}
+
+
+
+static void
+read_tape_help ()
+{
+  printf
+    ("Usage: !read-tape TAPE\n"
+     "Read a new tape from TAPE and set it as the current tape.\n"
+     "\n");
+  printf
+    ("The tape should be a list of numbers seperated by blanks, which represent the\n"
+     "cells in the tape. The current cell should be wrapped in < and >."
+     "\n");
+  printf
+    ("Example usage:\n"
+     "etbi> !read-tape 18 0 255 12 <28> 5 0 0 29 0 1\n"
+     "-> ... 18 0 255 12 <28> 5 0 0 29 0 1 ...\n");
+}
+
+static tape *
+read_tape (char *tape_str)
+{
+  tape *tmp_tape = NULL, *current_tape = NULL;
+  int
+    is_current = 0,
+    in_number = 0,
+    value = 0,
+    cell_index = 0;
+
+  while (1)
+    {
+      if (*tape_str == '<')
+        {
+          if (current_tape)
+            {
+              printf ("read-tape: Unexpected '<', there already is a current cell\n");
+              return NULL;
+            }
+          else
+            is_current = 1;
+        }
+      else if (is_current && *tape_str == '>')
+        ;
+      else if (isdigit (*tape_str))
+        {
+          if (!in_number)
+            {
+              in_number = 1;
+              value = 0;
+            }
+          value = (value * 10) + (*tape_str - '0');
+        }
+      else if (isblank (*tape_str) || *tape_str == '\0')
+        {
+          if (!in_number)
+            {
+              if (*tape_str == '\0')
+                break;
+              tape_str++;
+              continue;
+            }
+
+          if (!tmp_tape)
+            tmp_tape = initialize_tape ();
+
+          if (cell_index > TAPE_SEGMENT_SIZE-1)
+            {
+              tmp_tape = tape_right (tmp_tape);
+              cell_index = 0;
+            }
+
+          if (0 <= value && value <= 255)
+            tmp_tape->cells[cell_index] = value;
+          else
+            {
+              printf ("read-tape: %d doesn't fit in a cell\n", value);
+              return NULL;
+            }
+
+          in_number = 0;
+
+          if (is_current)
+            {
+              current_tape = tmp_tape;
+              current_tape->current_cell = cell_index;
+              is_current = 0;
+            }
+
+          if (*tape_str == '\0')
+            break;
+
+          cell_index++;
+        }
+      else
+        {
+          printf
+            ("read-tape: Unexpected input at '%c', see !help read-tape\n",
+             *tape_str);
+          return NULL;
+        }
+
+      tape_str++;
+    }
+
+  if (!tmp_tape)
+    {
+      printf ("read-tape: No tape input supplied, see !help read-tape\n");
+      return NULL;
+    }
+
+  if (!current_tape)
+    {
+      printf ("read-tape: No current cell given, see !help read-tape\n");
+      return NULL;
+    }
+
+  return current_tape;
 }
 
 

@@ -24,8 +24,6 @@ along with etbi.  If not, see <http://www.gnu.org/licenses/>.
 
 static tape *initialize_tape_segment (tape *, tape *);
 static char *cell_at(tape *, int);
-static tape *tape_left (tape *);
-static tape *tape_right (tape *);
 
 static void print_cells (char *, int, char *);
 
@@ -345,7 +343,7 @@ cell_at (tape *tape, int offset)
  * Return the tape segment left of the current in TAPE, if it doesn't
  * exist yet create it.
  */
-static tape *
+tape *
 tape_left (tape *tape)
 {
   if (tape->left == NULL)
@@ -358,7 +356,7 @@ tape_left (tape *tape)
  * Return the tape segment right of the current in TAPE, if it doesn't
  * exist yet create it.
  */
-static tape *
+tape *
 tape_right (tape *tape)
 {
   if (tape->right == NULL)
