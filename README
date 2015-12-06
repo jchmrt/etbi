@@ -14,8 +14,14 @@ _/___/___/___/___/___/___|                  |___\___\___\___\___\___\_
 
 etbi can interpret brainfuck source files with an endless tape of
 cells with the size of a char, initially set to 0. Use it with `etbi
-FILE`, or run one of the built-in examples with `etbi -e NAME`. You
-can always get help with `etbi --help`.
+FILE', or run one of the built-in examples with `etbi -e NAME'. You
+can always get help with `etbi --help'.
+
+etbi also features an interactive REPL-like (Read Eval Print Loop)
+mode, which you can access using `etbi -i'. In the interactive mode
+you can easily test snippets of brainfuck code, after which the new
+state of the tape is shown for easy debugging. The interactive mode
+features a few other modes, which you can see by typing `!help'.
 
 etbi implements a few simple optimizations:
 - Movement contraction: multiple movement instructions following
@@ -30,7 +36,7 @@ etbi implements a few simple optimizations:
   to a single instruction which uses memchr or memrchr to find one
   faster.
 
-To install etbi simply run `./configure && make && sudo make install`.
+To install etbi simply run `./configure && make && sudo make install'.
 
 etbi is licensed under the GPLv3+, see `COPYING' for the full license
 text.
