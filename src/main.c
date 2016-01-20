@@ -1,5 +1,5 @@
 /*
-Copyright 2015 Jochem Raat
+Copyright 2015, 2016 Jochem Raat
 
 This file is part of etbi.
 
@@ -55,12 +55,12 @@ main (int argc, char **argv)
 
   int c, option_index = 0;
   FILE *input;
-  char *input_file_name = NULL;
+  char *input_file_name = NULL, *input_str = NULL;
 
   instruction_list *insts;
   tape *tape;
 
-  while ((c = getopt_long (argc, argv, "hVvlie:",
+  while ((c = getopt_long (argc, argv, "hVvlie:c:",
                            long_options, &option_index))
          != -1)
     {
@@ -80,6 +80,9 @@ main (int argc, char **argv)
         case 'e':
           input_file_name = example_path (optarg);
           break;
+        case 'c':
+          input_str = optarg;
+          break;
         case 'l':
           print_example_list (argv[0]);
           break;
@@ -97,18 +100,26 @@ main (int argc, char **argv)
   if (optind < argc)
     input_file_name = argv[optind];
 
-  if (input_file_name)
-    input = fopen (input_file_name, "r");
+  /* Parse */
+  if (input_str)
+    insts = parse_brainfuck_string (input_str);
   else
-    input = stdin;
-
-  if (!input)
     {
-      perror_file(argv[0], input_file_name);
-      return 1;
+      if (input_file_name)
+        input = fopen (input_file_name, "r");
+      else
+        input = stdin;
+
+      if (!input)
+        {
+          perror_file(argv[0], input_file_name);
+          return 1;
+        }
+
+      insts = parse_brainfuck (input);
     }
 
-  insts = parse_brainfuck (input);
+  /* Optimize */
   insts = optimize_brainfuck (insts);
 
   if (verbose_flag)
@@ -118,6 +129,7 @@ main (int argc, char **argv)
       printf ("\n * Output of execution:\n\n");
     }
 
+  /* Evaluate */
   tape = eval_brainfuck (insts);
 
   if (verbose_flag)
@@ -179,6 +191,7 @@ usage (char *prog_name)
      "\n", prog_name);
   printf
     ("  -e, --example=NAME    Load example program\n"
+     "  -c CODE,              Run CODE\n"
      "  -l, --list-examples   List all possible example names\n"
      "  -i, --interactive     Start etbi in interactive mode\n"
      "  -v, --verbose         Print extra debugging information\n"

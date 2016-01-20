@@ -1,4 +1,4 @@
-dnl Copyright 2015 Jochem Raat
+dnl Copyright 2015, 2016 Jochem Raat
 dnl
 dnl This file is part of etbi.
 dnl
@@ -17,7 +17,7 @@ dnl along with etbi.  If not, see <http://www.gnu.org/licenses/>.
 
 
 
-AC_INIT([etbi], [0.1], [jchmrt@riseup.net])
+AC_INIT([etbi], [0.1.1], [jchmrt@riseup.net])
 AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([-Wall -Werror foreign])
 AC_PROG_CC
