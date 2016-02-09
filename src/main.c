@@ -138,6 +138,10 @@ main (int argc, char **argv)
       print_entire_tape (tape);
     }
 
+  /* TAPE and INST aren't deallocated here, because the program exits
+     anyway, they should be deallocated here if the program is
+     extended to run longer. */
+
   return 0;
 }
 
