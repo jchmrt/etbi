@@ -31,6 +31,8 @@ typedef struct tape_t
 
 tape *initialize_tape (void);
 
+void free_tape (tape *);
+
 tape *move_tape (tape *, int);
 void alter_tape (tape *, int, char);
 void set_tape (tape *, int, char);

@@ -25,6 +25,9 @@ along with etbi.  If not, see <http://www.gnu.org/licenses/>.
 static tape *initialize_tape_segment (tape *, tape *);
 static char *cell_at(tape *, int);
 
+static void free_tape_left (tape *);
+static void free_tape_right (tape *);
+
 static void print_cells (char *, int, char *);
 
 static char *first_non_zero (char *, size_t);
@@ -39,6 +42,46 @@ initialize_tape ()
   tape *tape = initialize_tape_segment (NULL, NULL);
   tape->current_cell = TAPE_SEGMENT_SIZE / 2;
   return tape;
+}
+
+/**
+ * Free the whole tape in both directions.
+ */
+void
+free_tape (tape *tape)
+{
+  free_tape_left (tape);
+  free_tape_right (tape);
+  free (tape->cells);
+  free (tape);
+}
+
+/**
+ * Free all tape to the left of TAPE.
+ */
+static void
+free_tape_left (tape *tape)
+{
+  if (tape->left)
+    {
+      free_tape_left (tape->left);
+      free (tape->left->cells);
+      free (tape->left);
+    }
+}
+
+/**
+ * Free all tape to the right of TAPE.
+ */
+static void
+free_tape_right (tape *tape)
+{
+  if (tape->right)
+    {
+      free_tape_right (tape->right);
+      free (tape->right->cells);
+      free (tape->right);
+    }
 }
 
 

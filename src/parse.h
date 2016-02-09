@@ -65,5 +65,6 @@ typedef struct instruction_t
 instruction_list *parse_brainfuck_string (char *);
 instruction_list *parse_brainfuck (FILE *);
 void print_instructions (instruction_list *);
+void free_instruction_list (instruction_list *);
 
 #endif

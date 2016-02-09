@@ -67,7 +67,10 @@ interactive_session ()
   interactive_notice ();
 
   while ((line = prompt_for_input (PROMPT)) != NULL)
+    {
       tape = process_input (tape, line);
+      free (line);
+    }
 
   printf ("\n");
 }
@@ -150,9 +153,9 @@ process_brainfuck (tape *current_tape, char *input)
   insts = optimize_brainfuck (insts);
   current_tape = eval_sequence (current_tape, insts);
 
-  print_entire_tape (current_tape);
+  free_instruction_list (insts);
 
-  free (input);
+  print_entire_tape (current_tape);
 
   return current_tape;
 }
@@ -196,6 +199,7 @@ process_command (tape *current_tape, char *command)
     }
   else if (strcmp (first, "clear") == 0)
     {
+      free_tape (current_tape);
       current_tape = initialize_tape ();
       print_entire_tape (current_tape);
     }
@@ -206,6 +210,7 @@ process_command (tape *current_tape, char *command)
           tape *tmp_tape = read_tape (command);
           if (tmp_tape)
             {
+              free_tape (current_tape);
               current_tape = tmp_tape;
               print_entire_tape (current_tape);
             }

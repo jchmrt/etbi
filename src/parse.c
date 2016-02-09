@@ -21,6 +21,7 @@ along with etbi.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdlib.h>
 
 static void print_instructions_inner (instruction_list *);
+static void free_instruction (instruction *);
 
 instruction_list *
 parse_brainfuck_string (char *input)
@@ -157,4 +158,26 @@ print_instructions_inner (instruction_list *list)
           break;
         }
     }
+}
+
+
+
+void
+free_instruction_list (instruction_list *insts)
+{
+  while (insts)
+    {
+      instruction_list *tmp = insts->rest;
+      free_instruction (insts->inst);
+      free (insts);
+      insts = tmp;
+    }
+}
+
+static void
+free_instruction (instruction *inst)
+{
+  if (inst->type == INST_LOOP)
+    free_instruction_list (inst->argument.insts);
+  free (inst);
 }
