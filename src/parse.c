@@ -78,8 +78,10 @@ parse_brainfuck (FILE *f)
           current_inst->argument.insts = parse_brainfuck (f);
           break;
         case ']':
+          free (current_inst);
           return begin;
         default:
+          free (current_inst);
           continue;
         }
 
