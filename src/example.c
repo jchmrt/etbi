@@ -19,6 +19,7 @@ along with etbi.  If not, see <http://www.gnu.org/licenses/>.
 #include <config.h>
 #include <string.h>
 #include <glob.h>
+#include <stdlib.h>
 
 #include "example.h"
 
