@@ -21,7 +21,13 @@ AC_INIT([etbi], [0.1.2], [jchmrt@riseup.net])
 AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([-Wall -Werror foreign])
 AC_PROG_CC
+
 gl_EARLY
+
+# Programs needed for building the static library
+AC_PROG_RANLIB
+AM_PROG_AR
+
 
 AC_ARG_WITH([readline],
   [AS_HELP_STRING([--with-readline],
@@ -68,7 +74,17 @@ AC_CONFIG_FILES([
   lib/Makefile
   src/Makefile
   examples/Makefile
+  tests/Makefile
   ])
+
+# Check for Check, used for testing
+PKG_CHECK_MODULES([CHECK], [check], :,
+  [AC_MSG_WARN([Check was not found, this means you will not be able \
+to run the unit tests (using `make check').])])
+
+AC_SUBST(CHECK_CFLAGS)
+AC_SUBST(CHECK_LIBS)
+
 
 gl_INIT
 

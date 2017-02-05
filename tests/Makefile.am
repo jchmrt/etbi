@@ -17,20 +17,10 @@
 
 ## Process this file with automake to produce Makefile.in
 
-AM_CFLAGS = -pedantic-errors -Werror -Wall \
-           -DEXAMPLE_PATH=\"$(exampledir)\" \
-           -I$(top_builddir)/lib -I$(top_srcdir)/lib # for gnulib
+TESTS = check_etbi
+check_PROGRAMS = check_etbi
+check_etbi_SOURCES = check_etbi.c \
+	check_tape.c check_tape.h
 
-etbi_LDADD = $(top_builddir)/src/libetbi.a $(READLINE_LIBS)
-
-bin_PROGRAMS = etbi
-etbi_SOURCES = main.c
-
-
-noinst_LIBRARIES = libetbi.a
-libetbi_a_SOURCES = parse.h parse.c \
-               optimize.h optimize.c \
-               tape.h tape.c \
-               eval.h eval.c \
-               example.h example.c \
-               interactive.h interactive.c
+check_etbi_CFLAGS = $(CHECK_CFLAGS) -pedantic-errors -Werror -Wall
+check_etbi_LDADD = $(top_builddir)/src/libetbi.a $(CHECK_LIBS)

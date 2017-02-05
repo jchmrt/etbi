@@ -20,5 +20,5 @@
 ACLOCAL_AMFLAGS = -I m4
 EXTRA_DIST = m4/gnulib-cache.m4 # for gnulib
 
-SUBDIRS = src examples lib
+SUBDIRS = src examples lib tests
 dist_doc_DATA = README
