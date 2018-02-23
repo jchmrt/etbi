@@ -248,6 +248,11 @@ split_word (char **command)
   if (*command)
     (*command)++;
 
+  /* If the command only consists of a single NULL byte, just set the
+     command to NULL. */
+  if (*command && !**command)
+    *command = NULL;
+
   first = (char *) malloc (sizeof (char) * (size+1));
 
   strncpy (first, all, size);
