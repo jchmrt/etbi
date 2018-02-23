@@ -64,7 +64,7 @@ AH_TEMPLATE([BF_SUFFIX],
             [Define to the suffix of brainfuck source files])
 
 AC_DEFINE(COPYRIGHT_STRING,
-          ["Copyright 2015, 2016 Jochem Raat <jchmrt@riseup.net>"])
+          ["Copyright 2015, 2016, 2018 Jochem Raat <jchmrt@riseup.net>"])
 AH_TEMPLATE([COPYRIGHT_STRING],
             [Define to the copyright notice for this package])
 

@@ -1,5 +1,5 @@
 /*
-Copyright 2015 Jochem Raat
+Copyright 2015, 2018 Jochem Raat
 
 This file is part of etbi.
 
@@ -383,18 +383,82 @@ read_tape (char *tape_str)
 
 
 
+#ifdef HAVE_LIBREADLINE
+/**
+ * Generate commands matching with TEXT.
+ */
+static char *
+command_generator (const char *text, int state)
+{
+  static int i, len;
+  char *name;
+  char *commands[] =
+    {
+      "!preview",
+      "!verbose",
+      "!clear",
+      "!read-tape",
+      "!help",
+      NULL
+    };
+
+  /*
+   * STATE = 0 if this is the first time we have been called with this
+   * TEXT for the first time, so we do some initialization.
+   */
+  if (!state)
+    {
+      i = 0;
+      len = strlen (text);
+    }
+
+  /* Find the next matching command */
+  while ((name = commands[i]))
+    {
+      i++;
+
+      if (strncmp (name, text, len) == 0)
+        return strdup (name);
+    }
+
+  return NULL;
+}
+
+/**
+ * Complete the TEXT iff the word is at the start of the line.
+ */
+static char **
+command_completion (const char *text, int start, int end)
+{
+  char **matches = NULL;
+
+  if (start == 0)
+    matches = rl_completion_matches (text, command_generator);
+
+  return matches;
+}
+
+/**
+ * Generate no matches in the default case, which happens when we try
+ * to complete in the middle of a line.
+ */
+static char *
+no_matches_generator (const char *text, int state)
+{
+  return NULL;
+}
+
 /**
  * Initialize readline, only callable if readline is available
  */
-#ifdef HAVE_LIBREADLINE
 static void
 initialize_readline ()
 {
-  /* Rebind <TAB> to insert tab, instead of completing since ther is
-     nothing to complete in brainfuck */
-  rl_bind_key ('\t', rl_insert);
+  /* Set up completion functions: */
+  rl_attempted_completion_function = command_completion;
+  rl_completion_entry_function = no_matches_generator;
 }
-#endif
+#endif  /* HAVE_LIBREADLINE */
 
 /**
  * Prompt for input using readline and add it to history if readline
