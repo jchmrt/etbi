@@ -33,7 +33,11 @@ parse_brainfuck_string (char *input)
 
   fseek (tmp_file, 0, SEEK_SET);
 
-  return parse_brainfuck (tmp_file);
+  instruction_list *result = parse_brainfuck (tmp_file);
+
+  fclose (tmp_file);
+
+  return result;
 }
 
 /**
